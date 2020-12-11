@@ -25,7 +25,13 @@ type Users = {
 };
 
 type signedUpUser = {
+  email: string;
+  uid: string;
+};
+
+type RegisteredUser = {
   name: string;
+  user: string;
   uid: string;
 };
 

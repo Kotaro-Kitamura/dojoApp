@@ -28,14 +28,14 @@ export function RegisterScreen() {
   const [users, setUsers] =useState("");
 
   const navigation = useNavigation();
-  const back = () => {
-    navigation.goBack();
+  const toChat = (user: RegisteredUser) => {
+    navigation.navigate("Chat", { user: user });
   };
 
   const getUsersDocRef = async () => {
     return await firebase.firestore().collection("users").doc();
   };
-  const sendUsers = async (value: string, user: signedInUser) => {
+  const sendUsers = async (value: string, user: RegisteredUser) => {
     if (value != "") {
       const docRef = await getUsersDocRef();
       const newName = {
@@ -47,6 +47,11 @@ export function RegisterScreen() {
       setName("");
     } else {
       Alert.alert("エラー", "名前を入力してください");
+      const currentUser: RegisteredUser = {
+        name: user.user.name,
+        uid: user.user.uid,
+      };
+      toChat(currentUser);
     }
   };
 
@@ -77,15 +82,11 @@ export function RegisterScreen() {
         <View style={styles.includeButtons}>
           <Button
             title="登録"
-            onPress={() => {}}
-          />
-          <View style={styles.spacer2}></View>
-          <Button
-            title="ログイン画面に戻る"
             onPress={() => {
-              back();
+              toChat(currentUser);
             }}
           />
+          <View style={styles.spacer2}></View>
         </View>
       </KeyboardAvoidingView>
     </SafeAreaView>
