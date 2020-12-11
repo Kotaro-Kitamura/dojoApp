@@ -40,9 +40,14 @@ export function SignupScreen() {
       .createUserWithEmailAndPassword(email, password)
       .then((user) => {
 
+    
         //登録成功したらログイン画面に戻る
         Alert.alert("登録成功！", "続いてお名前を登録してください");
-        toRegister;
+        const currentUer : signedInUser = {
+          email:user.user?.email,
+          uid:user.user.uid,
+        }
+        toRegister(currentUer);
 
       })
       .catch((error) => {
