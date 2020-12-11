@@ -24,7 +24,7 @@ type Props = {
 export function ChatScreen(props: Props) {
   const [text, setText] = useState<string>("");
   const [messages, setMessages] = useState<Message[]>([]);
-  const currentUser = props.route.params.user;
+  const RegisteredUser = ;
   const navigation = useNavigation();
   const back = () => {
     navigation.goBack();
@@ -137,7 +137,7 @@ export function ChatScreen(props: Props) {
     >
       <SafeAreaView style={styles.container}>
         <Text style={{ fontSize: 20, height: 40, width: "98%" }}>
-          {currentUser.email}でログイン中
+          {RegisteredUser.email}でログイン中
         </Text>
         <View style={styles.flatlistCotainer}>
           <FlatList
@@ -145,7 +145,7 @@ export function ChatScreen(props: Props) {
             data={messages}
             inverted={true}
             renderItem={({ item }: { item: Message }) => (
-              <ChatItem userId={currentUser.uid} item={item} />
+              <ChatItem userId={RegisteredUser.uid} item={item} />
             )}
             keyExtractor={(_, index) => index.toString()}
           />
@@ -166,7 +166,7 @@ export function ChatScreen(props: Props) {
           <TouchableOpacity
             style={styles.sendButtonContainer}
             onPress={() => {
-              sendMessage(text, currentUser);
+              sendMessage(text, RegisteredUser);
             }}
           >
             <Text style={styles.sendButton}>送信</Text>

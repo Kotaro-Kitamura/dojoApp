@@ -13,45 +13,40 @@ import {
   Alert,
   StatusBar,
 } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import { RouteProp, useNavigation } from "@react-navigation/native";
 import firebase from "firebase";
 import { fireConfig } from "../Fire";
-import logo from "../../assets/ojigi.png";
+import logo from "../../assets/ojigi.png"; 
+import { StackNavigationProp } from "@react-navigation/stack";
 
-export function RegisterScreen() {
-  if (firebase.apps.length === 0) {
-    firebase.initializeApp(fireConfig);
-  }
+type Props = {
+  route: RouteProp<RootStackParamList, "Register">
+  navigation: StackNavigationProp<RootStackParamList, "Register">
+}
 
-
-  const [name, setName] = useState("");
-  const [users, setUsers] =useState("");
-
-  const navigation = useNavigation();
-  const toChat = (user: RegisteredUser) => {
-    navigation.navigate("Chat", { user: user });
+export function RegisterScreen(props: Props) {  
+  const [name, setName] = useState<string>("");
+  const currentUser = props.route.params.user;
+  const navigation = props.navigation;
+  
+  const toChat = () => {
+    navigation.navigate("Chat");
   };
 
   const getUsersDocRef = async () => {
     return await firebase.firestore().collection("users").doc();
   };
-  const sendUsers = async (value: string, user: RegisteredUser) => {
-    if (value != "") {
+  const registerUserInfo = async () => {
+    if (name !== "") {
       const docRef = await getUsersDocRef();
-      const newName = {
-        name: value,
-        createdAt: firebase.firestore.Timestamp.now(),
-        userId: user.uid,
-      } as Users;
-      await docRef.set(newName);
-      setName("");
+      const newUser: RegisteredUser = {
+        name: name,
+        uid: currentUser.uid,
+      };
+      await docRef.set(newUser);
+      toChat();
     } else {
       Alert.alert("エラー", "名前を入力してください");
-      const currentUser: RegisteredUser = {
-        name: user.user.name,
-        uid: user.user.uid,
-      };
-      toChat(currentUser);
     }
   };
 
@@ -82,9 +77,7 @@ export function RegisterScreen() {
         <View style={styles.includeButtons}>
           <Button
             title="登録"
-            onPress={() => {
-              toChat(currentUser);
-            }}
+            onPress={registerUserInfo}
           />
           <View style={styles.spacer2}></View>
         </View>

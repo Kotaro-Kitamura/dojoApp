@@ -4,10 +4,10 @@ type signedInUser = {
 };
 
 type RootStackParamList = {
-  Chat: { user: signedInUser };
+  Chat: undefined;
   SignIn: undefined;
   SignUp: { user: signedUpUser };
-  Register: undefined;
+  Register: { user: signedInUser };
 };
 
 type Message = {
@@ -18,12 +18,6 @@ type Message = {
 
 declare module "*.png";
 
-type Users = {
-  name: string;
-  createdAt: firebase.firestore.Timestamp;
-  userId: string;
-};
-
 type signedUpUser = {
   email: string;
   uid: string;
@@ -31,7 +25,5 @@ type signedUpUser = {
 
 type RegisteredUser = {
   name: string;
-  user: string;
   uid: string;
 };
-
