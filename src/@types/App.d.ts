@@ -4,7 +4,7 @@ type signedInUser = {
 };
 
 type RootStackParamList = {
-  Chat: undefined;
+  Chat: { user: RegisteredUser };
   SignIn: undefined;
   SignUp: { user: signedUpUser };
   Register: { user: signedInUser };

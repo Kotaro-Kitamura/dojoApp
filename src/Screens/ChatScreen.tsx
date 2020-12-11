@@ -24,7 +24,7 @@ type Props = {
 export function ChatScreen(props: Props) {
   const [text, setText] = useState<string>("");
   const [messages, setMessages] = useState<Message[]>([]);
-  const RegisteredUser = ;
+  const RegisteredUser = props.route.params.user;
   const navigation = useNavigation();
   const back = () => {
     navigation.goBack();
@@ -137,7 +137,7 @@ export function ChatScreen(props: Props) {
     >
       <SafeAreaView style={styles.container}>
         <Text style={{ fontSize: 20, height: 40, width: "98%" }}>
-          {RegisteredUser.email}でログイン中
+          {RegisteredUser}でログイン中
         </Text>
         <View style={styles.flatlistCotainer}>
           <FlatList

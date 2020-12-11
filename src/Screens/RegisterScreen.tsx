@@ -14,7 +14,7 @@ import {
   StatusBar,
 } from "react-native";
 import { RouteProp, useNavigation } from "@react-navigation/native";
-import firebase from "firebase";
+import firebase, { analytics } from "firebase";
 import { fireConfig } from "../Fire";
 import logo from "../../assets/ojigi.png"; 
 import { StackNavigationProp } from "@react-navigation/stack";
