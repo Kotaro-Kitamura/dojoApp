@@ -16,15 +16,14 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import firebase from "firebase";
 import { fireConfig } from "../Fire";
-import logo from "../../assets/kids_karate.png";
+import logo from "../../assets/ojigi.png";
 
 export function RegisterScreen() {
   if (firebase.apps.length === 0) {
     firebase.initializeApp(fireConfig);
   }
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+
   const [name, setName] = useState("");
   const [users, setUsers] =useState("");
 
@@ -47,24 +46,8 @@ export function RegisterScreen() {
       await docRef.set(newName);
       setName("");
     } else {
-      Alert.alert("エラー", "メッセージを入力してください！");
+      Alert.alert("エラー", "名前を入力してください");
     }
-  };
-
-  const pressedSubmit = (email: string, password: string) => {
-    firebase
-      .auth()
-      .createUserWithEmailAndPassword(email, password)
-      .then((user) => {
-        //登録成功したらログイン画面に戻る
-        Alert.alert("登録成功！", "ログインできるようになりました");
-        back();
-      })
-      .catch((error) => {
-        //エラーが返ってきたらその内容をアラートで表示
-        console.log(error);
-        Alert.alert("エラー", `${error}`);
-      });
   };
 
   return (
@@ -80,7 +63,7 @@ export function RegisterScreen() {
       />
       <KeyboardAvoidingView style={styles.container}>
         <View style={styles.titleAndFieldView}>
-          <Text style={styles.screenTitle}>新規登録</Text>
+          <Text style={styles.screenTitle}>お名前登録</Text>
           <TextInput
             style={styles.inputField}
             placeholder="氏名を入力ください"
@@ -94,9 +77,7 @@ export function RegisterScreen() {
         <View style={styles.includeButtons}>
           <Button
             title="登録"
-            onPress={() => {
-              pressedSubmit(email, password);
-            }}
+            onPress={() => {}}
           />
           <View style={styles.spacer2}></View>
           <Button

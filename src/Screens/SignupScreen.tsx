@@ -27,6 +27,9 @@ export function SignupScreen() {
   const [password, setPassword] = useState("");
   
   const navigation = useNavigation();
+  const toRegister = (user: signedUpUser) => {
+    navigation.navigate("Register", { user: user });
+  };
   const back = () => {
     navigation.goBack();
   };
@@ -36,9 +39,11 @@ export function SignupScreen() {
       .auth()
       .createUserWithEmailAndPassword(email, password)
       .then((user) => {
+
         //登録成功したらログイン画面に戻る
-        Alert.alert("登録成功！", "ログインできるようになりました");
-        back();
+        Alert.alert("登録成功！", "続いてお名前を登録してください");
+        toRegister;
+
       })
       .catch((error) => {
         //エラーが返ってきたらその内容をアラートで表示
@@ -88,6 +93,7 @@ export function SignupScreen() {
             title="登録"
             onPress={() => {
               pressedSubmit(email, password);
+              toRegister;
             }}
           />
           <View style={styles.spacer2}></View>
