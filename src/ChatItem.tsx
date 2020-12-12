@@ -32,6 +32,9 @@ export function ChatItem({ item, userId }: Props) {
       <Text style={userId == item.userId ? { color: "#fff" } : {}}>
         {item.text}
       </Text>
+      <Text>
+        {item.name}
+      </Text>
     </View>
   );
 }

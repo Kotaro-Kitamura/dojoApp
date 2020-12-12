@@ -24,7 +24,7 @@ type Props = {
 export function ChatScreen(props: Props) {
   const [text, setText] = useState<string>("");
   const [messages, setMessages] = useState<Message[]>([]);
-  const RegisteredUser = props.route.params.user;
+  const registeredUser = props.route.params.user;
   const navigation = useNavigation();
   const back = () => {
     navigation.goBack();
@@ -36,13 +36,14 @@ export function ChatScreen(props: Props) {
   };
 
   //send押した時に実行する関数…参照しているデータベースに追加
-  const sendMessage = async (value: string, user: signedInUser) => {
+  const sendMessage = async (value: string, user: RegisteredUser) => {
     if (value != "") {
       const docRef = await getMessageDocRef();
       const newMessage = {
         text: value,
         createdAt: firebase.firestore.Timestamp.now(),
         userId: user.uid,
+        name: user.name,
       } as Message;
       await docRef.set(newMessage);
       setText("");
@@ -108,6 +109,7 @@ export function ChatScreen(props: Props) {
   }, [navigation]);
 
   useEffect(() => {
+    console.log("registeredUser:" + registeredUser);
     //この中をまるまる変更(関数getMessagesの中身をここに記述)
     const messages = [] as Message[];
     /* const unsubscribe = の部分を追加 */
@@ -137,7 +139,7 @@ export function ChatScreen(props: Props) {
     >
       <SafeAreaView style={styles.container}>
         <Text style={{ fontSize: 20, height: 40, width: "98%" }}>
-          {RegisteredUser}でログイン中
+          {registeredUser.name}でログイン中
         </Text>
         <View style={styles.flatlistCotainer}>
           <FlatList
@@ -145,7 +147,7 @@ export function ChatScreen(props: Props) {
             data={messages}
             inverted={true}
             renderItem={({ item }: { item: Message }) => (
-              <ChatItem userId={RegisteredUser.uid} item={item} />
+              <ChatItem userId={registeredUser.uid} item={item} />
             )}
             keyExtractor={(_, index) => index.toString()}
           />
@@ -166,7 +168,7 @@ export function ChatScreen(props: Props) {
           <TouchableOpacity
             style={styles.sendButtonContainer}
             onPress={() => {
-              sendMessage(text, RegisteredUser);
+              sendMessage(text, registeredUser);
             }}
           >
             <Text style={styles.sendButton}>送信</Text>

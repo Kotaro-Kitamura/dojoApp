@@ -16,7 +16,7 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import firebase from "firebase";
 import { fireConfig } from "../Fire";
-import logo from "../../assets/karate.png"; 
+import logo from "../../assets/karate.png";
 
 export function SigninScreen() {
   if (firebase.apps.length === 0) {
@@ -25,14 +25,36 @@ export function SigninScreen() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
+
 
   const navigation = useNavigation();
-  const toChat = (user: signedInUser) => {
+  const toChat = (user: RegisteredUser) => {
     navigation.navigate("Chat", { user: user });
   };
   const toSignup = () => {
     navigation.navigate("SignUp");
   };
+
+  function getUserName(keyword: string) {
+    const getNameRef = firebase.firestore().collection("users");
+    // const keyword = "xXiYCi6qqVUcl4brO2exwoYepe03";
+    const query = getNameRef.where("uid", "==", keyword);
+    query
+      .get()
+      .then((querySnapshot) => {
+        querySnapshot.forEach(function (doc) {
+          // doc.data() is never undefined for query doc snapshots
+          console.log(doc.id, " => ", doc.data().name);
+          setName(doc.data().name);
+        });
+      })
+      .catch(function (error) {
+        console.log("Error getting documents: ", error);
+      });
+
+
+  }
 
   const pressedSignIn = (email: string, password: string) => {
     firebase
@@ -43,15 +65,17 @@ export function SigninScreen() {
         if (!user) throw new Error("user is empty");
         if (!user.user) throw new Error("user.user is empty");
         if (!user.user.email) throw new Error("user.user.email is empty");
-        console.log(JSON.stringify(user));
-
-        const currentUser: signedInUser = {
-          email: user.user.email,
+        // console.log(JSON.stringify(user));
+        getUserName(user.user.uid);
+        const registeredUser: RegisteredUser = {
+          name: name,
           uid: user.user.uid,
         };
 
+
         Alert.alert("ログイン成功！");
-        toChat(currentUser);
+
+        toChat(registeredUser);
       })
       .catch((error) => {
         console.log(error);

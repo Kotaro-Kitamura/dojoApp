@@ -14,6 +14,7 @@ type Message = {
   text: string;
   createdAt: firebase.firestore.Timestamp;
   userId: string;
+  name: string;
 };
 
 declare module "*.png";

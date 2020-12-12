@@ -29,8 +29,9 @@ export function RegisterScreen(props: Props) {
   const currentUser = props.route.params.user;
   const navigation = props.navigation;
   
-  const toChat = () => {
-    navigation.navigate("Chat");
+
+  const toChat = (user: RegisteredUser) => {
+    navigation.navigate("Chat", {user: user});
   };
 
   const getUsersDocRef = async () => {
@@ -44,7 +45,7 @@ export function RegisterScreen(props: Props) {
         uid: currentUser.uid,
       };
       await docRef.set(newUser);
-      toChat();
+      toChat(newUser);
     } else {
       Alert.alert("エラー", "名前を入力してください");
     }
