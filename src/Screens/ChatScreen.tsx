@@ -29,6 +29,9 @@ export function ChatScreen(props: Props) {
   const back = () => {
     navigation.goBack();
   };
+  const toSignin = () => {
+    navigation.navigate("SignIn");
+  };
 
   //データベースを参照
   const getMessageDocRef = async () => {
@@ -99,10 +102,10 @@ export function ChatScreen(props: Props) {
           onPress={() => {
             // unsubscribe();   <--- 削除
             pressedSignOut();
-            back();
+            toSignin();
           }}
         >
-          <Text>Sign Out</Text>
+          <Text>ログアウト</Text>
         </TouchableOpacity>
       ),
     });

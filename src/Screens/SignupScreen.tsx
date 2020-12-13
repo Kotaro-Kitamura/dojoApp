@@ -42,7 +42,6 @@ export function SignupScreen() {
         if (!user) throw new Error("user is empty");
         if (!user.user) throw new Error("user.user is empty");
 　　　　　if (!user.user.email) throw new Error("user.user.email is empty");
-        //登録成功したらログイン画面に戻る
         Alert.alert("登録成功！", "続いてお名前を登録してください");
         const currentUser: signedUpUser = {
           email: user.user.email,

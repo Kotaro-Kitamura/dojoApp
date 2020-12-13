@@ -26,7 +26,7 @@ export function SigninScreen() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
-
+  const [user, setUser] = useState<firebase.auth.UserCredential>();
 
   const navigation = useNavigation();
   const toChat = (user: RegisteredUser) => {
@@ -47,17 +47,16 @@ export function SigninScreen() {
           // doc.data() is never undefined for query doc snapshots
           console.log(doc.id, " => ", doc.data().name);
           setName(doc.data().name);
+          return doc.data().name;
         });
       })
       .catch(function (error) {
         console.log("Error getting documents: ", error);
       });
-
-
   }
 
-  const pressedSignIn = (email: string, password: string) => {
-    firebase
+  const pressedSignIn = async (email: string, password: string) => {
+    await firebase
       .auth()
       .signInWithEmailAndPassword(email, password)
       .then((user) => {
@@ -67,20 +66,27 @@ export function SigninScreen() {
         if (!user.user.email) throw new Error("user.user.email is empty");
         // console.log(JSON.stringify(user));
         getUserName(user.user.uid);
-        const registeredUser: RegisteredUser = {
-          name: name,
-          uid: user.user.uid,
-        };
-
-
-        Alert.alert("ログイン成功！");
-
-        toChat(registeredUser);
+        setUser(user);
+        // const registeredUser: RegisteredUser = {
+        //   name: name,
+        //   uid: user.user.uid,
+        // };
+        // toChat(registeredUser);
+        // Alert.alert("ログイン成功！");
       })
       .catch((error) => {
         console.log(error);
         Alert.alert("エラー！", `${error}`);
       });
+
+    if (user && user.user) {
+      const registeredUser: RegisteredUser = {
+        name: name,
+        uid: user.user.uid,
+      };
+      toChat(registeredUser);
+      Alert.alert("ログイン成功！");
+    }
   };
 
   return (
@@ -96,7 +102,8 @@ export function SigninScreen() {
       />
       <KeyboardAvoidingView style={styles.container}>
         <View style={styles.titleAndFieldView}>
-          <Text style={styles.screenTitle}>〇〇道場アプリ</Text>
+          <Text style={styles.screenSubTitle}>全日本空手道連盟和道会</Text>
+          <Text style={styles.screenTitle}>北村道場アプリ</Text>
           <TextInput
             style={styles.inputField}
             placeholder="メールアドレスを入力"
@@ -157,6 +164,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     flex: 3,
+  },
+  screenSubTitle: {
+    fontSize: 15,
+    marginBottom: 20,
+    color: "white",
   },
   screenTitle: {
     fontSize: 30,

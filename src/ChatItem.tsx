@@ -29,10 +29,10 @@ export function ChatItem({ item, userId }: Props) {
             }
       }
     >
-      <Text style={userId == item.userId ? { color: "#fff" } : {}}>
+      <Text style={userId == item.userId ? { color: "#fff"} : {}}>
         {item.text}
       </Text>
-      <Text>
+        <Text style={{ fontSize: 10 }}>
         {item.name}
       </Text>
     </View>
